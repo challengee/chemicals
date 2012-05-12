@@ -1,0 +1,517 @@
+chinese:
+  template:
+    <message>@</message>
+
+  raw:
+    <message>你好世界</message>
+
+simple_text:
+  template:
+    <person>@</person>
+
+  raw:
+    <person>John Doe</person>
+
+simple_text_alias:
+  template:
+    <person>name</person>
+
+  raw:
+    <person>John Doe</person>
+
+
+skip_text_node:
+  template:
+    <name xmlns:ch='http://piesync.com/xml/chemicals' ch:as='name'>
+      <first-name></first-name>
+      <last-name>last_name</last-name>
+    </name>
+
+  raw:
+    <name>
+      <first-name>John</first-name>
+      <last-name>Doe</last-name>
+    </name>
+
+simple_attributes:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' name='full_name'/>
+  raw:
+    <person name="John Doe"/>
+
+ignore_attribute:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' />
+  raw:
+    <person name='John Doe'/>
+
+text_attributes:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' age='age'>name</person>
+  raw:
+    <person age='24'>John Doe</person>
+
+simple_element_alias:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' ch:as='individual'>@</person>
+
+  raw:
+    <person>John Doe</person>
+
+skip_element:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' ch:as='individual'>
+      <name>@</name>
+    </person>
+
+  raw:
+    <person>
+      <name>John Doe</name>
+    </person>
+
+empty_collection:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals'>
+      <emails>
+        <email ch:as='emails' ch:mode='collect'>@</email>
+      </emails>
+    </person>
+
+  raw:
+    <person>
+      <emails>
+      </emails>
+    </person>
+
+simple_collection:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals'>
+      <emails>
+        <email ch:as='emails' ch:mode='collect'>@</email>
+      </emails>
+    </person>
+
+  raw:
+    <person>
+      <emails>
+        <email>john.doe@gmail.com</email>
+        <email>john@acme.com</email>
+      </emails>
+    </person>
+
+multiple_collections:
+  template:
+     <person xmlns:ch='http://piesync.com/xml/chemicals' ch:as='contact'>
+      <emails>
+        <email ch:mode='collect' ch:as='emails'>@</email>
+      </emails>
+      <phone-numbers>
+        <number ch:mode='collect' ch:as='phone_numbers'>@</number>
+      </phone-numbers>
+    </person>
+
+  raw:
+    <person>
+      <emails>
+        <email>john.doe@gmail.com</email>
+        <email>john@acme.com</email>
+      </emails>
+      <phone-numbers>
+        <number>1</number>
+        <number>2</number>
+      </phone-numbers>
+    </person>
+
+mixed_collection:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' ch:as='contact'>
+      <email ch:as='emails' ch:mode='collect'>@</email>
+      <name>name</name>
+    </person>
+  raw:
+    <person>
+      <email>john.doe@gmail.com</email>
+      <email>john@acme.com</email>
+      <name>John Doe</name>
+    </person>
+
+mixed_collections:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals' ch:as='contact'>
+      <email label='label' ch:as='emails' ch:mode='collect'>address</email>
+      <phone ch:as='phones' ch:mode='collect'>@</phone>
+      <address ch:as='addresses' ch:mode='collect'>@</address>
+      <name>name</name>
+    </person>
+  raw:
+    <person>
+      <email label='work'>john.doe@gmail.com</email>
+      <email>john@acme.com</email>
+      <phone>1</phone>
+      <name>John Doe</name>
+    </person>
+
+mixed_collections_extreme:
+  template:
+    <people xmlns:ch='http://piesync.com/xml/chemicals'>
+      <person ch:mode='collect'>
+        <email label='label' ch:as='emails' ch:mode='collect'>address</email>
+        <phone ch:as='phones' ch:mode='collect'>@</phone>
+        <address ch:as='addresses' ch:mode='collect' country='country' code='country_code'>
+          <street>street</street>
+          <number>housenumber</number>
+        </address>
+        <name>name</name>
+      </person>
+    </people>
+  raw:
+    <people>
+      <person>
+        <email label='work'>john.doe@gmail.com</email>
+        <email>john@acme.com</email>
+        <phone>1</phone>
+        <name>John Doe</name>
+      </person>
+      <person>
+        <phone>1</phone>
+        <phone>2</phone>
+        <phone>3</phone>
+        <address country='Belgium' code='BE'>
+          <street>Désiré Van Monckhovenstraat</street>
+          <number>123</number>
+        </address>
+      </person>
+    </people>
+
+mixed_elements_text:
+  template:
+    <people xmlns:ch='http://piesync.com/xml/chemicals'>
+      <person ch:mode='collect'>
+        <name ch:as='name'>
+          <first>given</first>
+          <last>family</last>
+        </name>
+        <emails>
+          <email ch:mode='collect' ch:as='emails'>@</email>
+        </emails>
+        <phone-numbers>
+          <number ch:mode='collect' ch:as='phones'>
+            <country>country</country>
+            <number>
+              <legacy>number</legacy>
+            </number>
+          </number>
+        </phone-numbers>
+      </person>
+    </people>
+  raw:
+    <people>
+      <person>
+        <name>
+          <first>John</first>
+          <last>Doe</last>
+        </name>
+        <emails>
+          <email>john.doe@gmail.com</email>
+          <email>john@acme.com</email>
+        </emails>
+        <phone-numbers>
+          <number>
+            <country>Belgium</country>
+            <number>
+              <legacy>1</legacy>
+            </number>
+            <useless>Hey</useless>
+          </number>
+          <number>
+            <country>USA</country>
+            <number>
+              <legacy>2</legacy>
+            </number>
+          </number>
+        </phone-numbers>
+      </person>
+      <person>
+        <name>
+          <first>Jane</first>
+        </name>
+        <emails>
+          <email>jane.doe@gmail.com</email>
+        </emails>
+        <useless>Hey</useless>
+      </person>
+    </people>
+  raw_render:
+    <people>
+      <person>
+        <name>
+          <first>John</first>
+          <last>Doe</last>
+        </name>
+        <emails>
+          <email>john.doe@gmail.com</email>
+          <email>john@acme.com</email>
+        </emails>
+        <phone-numbers>
+          <number>
+            <country>Belgium</country>
+            <number>
+              <legacy>1</legacy>
+            </number>
+          </number>
+          <number>
+            <country>USA</country>
+            <number>
+              <legacy>2</legacy>
+            </number>
+          </number>
+        </phone-numbers>
+      </person>
+      <person>
+        <name>
+          <first>Jane</first>
+        </name>
+        <emails>
+          <email>jane.doe@gmail.com</email>
+        </emails>
+      </person>
+    </people>
+
+mixed_elements_text_attributes:
+  template:
+    <people xmlns:ch='http://piesync.com/xml/chemicals'>
+      <person ch:mode='collect'>
+        <name ch:as='name'>
+          <first>given</first>
+          <last>family</last>
+        </name>
+        <emails>
+          <email ch:mode='collect' ch:as='emails' type='label'>address</email>
+        </emails>
+        <phone-numbers>
+          <number ch:mode='collect' ch:as='phones'>
+            <country>country</country>
+            <number>
+              <legacy system='system'>number</legacy>
+            </number>
+          </number>
+        </phone-numbers>
+      </person>
+    </people>
+  raw:
+    <people>
+      <person>
+        <name>
+          <first>John</first>
+          <last>Doe</last>
+        </name>
+        <emails useless='hey'>
+          <email type='home'>john.doe@gmail.com</email>
+          <email>john@acme.com</email>
+        </emails>
+        <phone-numbers>
+          <number>
+            <country>Belgium</country>
+            <number>
+              <legacy system='sap'>1</legacy>
+            </number>
+            <useless>Hey</useless>
+          </number>
+          <number>
+            <country>USA</country>
+            <number>
+              <legacy>2</legacy>
+            </number>
+          </number>
+        </phone-numbers>
+      </person>
+      <person>
+        <name>
+          <first>Jane</first>
+        </name>
+        <emails>
+          <email type='work'>jane.doe@gmail.com</email>
+        </emails>
+        <useless>Hey</useless>
+      </person>
+    </people>
+  raw_render:
+    <people>
+      <person>
+        <name>
+          <first>John</first>
+          <last>Doe</last>
+        </name>
+        <emails>
+          <email type='home'>john.doe@gmail.com</email>
+          <email>john@acme.com</email>
+        </emails>
+        <phone-numbers>
+          <number>
+            <country>Belgium</country>
+            <number>
+              <legacy system='sap'>1</legacy>
+            </number>
+          </number>
+          <number>
+            <country>USA</country>
+            <number>
+              <legacy>2</legacy>
+            </number>
+          </number>
+        </phone-numbers>
+      </person>
+      <person>
+        <name>
+          <first>Jane</first>
+        </name>
+        <emails>
+          <email type='work'>jane.doe@gmail.com</email>
+        </emails>
+      </person>
+    </people>
+
+namespaces:
+  template:
+    <name xmlns:ch='http://piesync.com/xml/chemicals'
+        xmlns:test='http://piesync.com/xml/test'
+        xmlns:test2='http://piesync.com/xml/test2' ch:as='name'
+        test2:age='age'>
+      <test:first-name>first_name</test:first-name>
+      <test:last-name>last_name</test:last-name>
+    </name>
+
+  raw:
+    <name xmlns:test='http://piesync.com/xml/test' xmlns:test2='http://piesync.com/xml/test2'
+        test2:age='24'>
+      <test:first-name>John</test:first-name>
+      <test:last-name>Doe</test:last-name>
+    </name>
+
+default_namespaces:
+  template:
+    <test:name xmlns:ch='http://piesync.com/xml/chemicals'
+        xmlns:test='http://piesync.com/xml/test'
+        xmlns:test2='http://piesync.com/xml/test2' ch:as='name'
+        test2:age='age'>
+      <test:first-name test2:length='lds'>first_name</test:first-name>
+      <test:last-name>last_name</test:last-name>
+      <test2:company test2:name='title'>company</test2:company>
+    </test:name>
+
+  raw:
+    <name xmlns='http://piesync.com/xml/test' xmlns:test2='http://piesync.com/xml/test2'
+        test2:age='24'>
+      <last-name>Doe</last-name>
+      <first-name>John</first-name>
+      <test2:company test2:name='CEO'>PieSync</test2:company>
+    </name>
+
+multiple_default_namespaces:
+  template:
+    <test:name xmlns:ch='http://piesync.com/xml/chemicals'
+        xmlns:test='http://piesync.com/xml/test'
+        xmlns:test2='http://piesync.com/xml/test2' ch:as='name'
+        age='age'>
+      <test:first-name test2:length='lds'>first_name</test:first-name>
+      <test:last-name>last_name</test:last-name>
+      <test2:company test2:name='title'>
+        <test2:name>company</test2:name>
+        <test2:title>title</test2:title>
+      </test2:company>
+    </test:name>
+
+  raw:
+    <name xmlns='http://piesync.com/xml/test' age='24'>
+      <last-name>Doe</last-name>
+      <first-name>John</first-name>
+      <company xmlns='http://piesync.com/xml/test2'>
+        <name>PieSync</name>
+        <title>CEO</title>
+      </company>
+    </name>
+
+sudden_namespaces:
+  template:
+    <name xmlns:ch='http://piesync.com/xml/chemicals'
+        xmlns:test='http://piesync.com/xml/test'
+        xmlns:test2='http://piesync.com/xml/test2'
+        xmlns:sudden='http://piesync.com/xml/sudden'
+        ch:as='name'
+        test2:age='age'>
+      <test:first-name>first_name</test:first-name>
+      <test:last-name>last_name</test:last-name>
+      <sudden:gender>gender</sudden:gender>
+    </name>
+
+  raw:
+    <name xmlns:test='http://piesync.com/xml/test' xmlns:test2='http://piesync.com/xml/test2'
+        test2:age='24'>
+      <test:first-name>John</test:first-name>
+      <test:last-name>Doe</test:last-name>
+      <sudden:gender xmlns:sudden='http://piesync.com/xml/sudden'>male</sudden:gender>
+    </name>
+
+different_prefix_names:
+  template:
+    <name xmlns:ch='http://piesync.com/xml/chemicals'
+        xmlns:a='http://piesync.com/xml/test'
+        xmlns:b='http://piesync.com/xml/test2' ch:as='name'
+        b:age='age'>
+      <a:first-name>first_name</a:first-name>
+      <a:last-name>last_name</a:last-name>
+    </name>
+
+  raw:
+    <name xmlns:test='http://piesync.com/xml/test' xmlns:test2='http://piesync.com/xml/test2'
+        test2:age='24'>
+      <test:first-name>John</test:first-name>
+      <test:last-name>Doe</test:last-name>
+    </name>
+
+preserve_empty_attributes:
+  template:
+    <person xmlns:ch='http://piesync.com/xml/chemicals'>
+      <name first='first_name' last='last_name' />
+    </person>
+
+  raw:
+    <person>
+      <name first='' last='Doe' />
+    </person>
+
+partial_template:
+  template:
+    <person ch:as='balance' xmlns:ch='http://piesync.com/xml/chemicals'>
+      <useful>
+        <balance currency='currency'>amount</balance>
+      <useful>
+    </person>
+
+  raw:
+    <person>
+      <useless>
+        <emails>
+          <email primary='true'>john.doe@acme.com</email>
+          <email>john.doe@gmail.com</email>
+        </emails
+      </useless>
+      <useful>
+        <balance currency='dollar'>1.000.000.000</balance>
+      <useful>
+    </person>
+
+no_data:
+  template:
+    <atom:entry xmlns:ch='http://piesync.com/xml/chemicals' xmlns:atom='http://www.w3.org/2005/Atom' xmlns:gContact='http://schemas.google.com/contact/2008' xmlns:gd='http://schemas.google.com/g/2005' xmlns:app='http://www.w3.org/2007/app' xmlns:batch='http://schemas.google.com/gdata/batch' >
+      <gd:name ch:as='name'>
+        <gd:givenName>first_name</gd:givenName>
+        <gd:familyName>last_name</gd:familyName>
+      </gd:name>
+      <bla>b</bla>
+    </atom:entry>
+  raw:
+    <atom:entry xmlns:atom='http://www.w3.org/2005/Atom' xmlns:gContact='http://schemas.google.com/contact/2008' xmlns:gd='http://schemas.google.com/g/2005' xmlns:app='http://www.w3.org/2007/app' xmlns:batch='http://schemas.google.com/gdata/batch' >
+      <gd:name ch:as='name'>
+      </gd:name>
+    </atom:entry>

@@ -16,7 +16,6 @@ Gem::Specification.new do |s|
   s.version       = Chemicals::VERSION
 
   s.add_dependency 'nokogiri'
-  s.add_dependency 'hashie'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'mocha'

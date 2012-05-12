@@ -30,12 +30,12 @@ module Chemicals
       # configuation is different in every case
       config = case config_node
         when Nokogiri::XML::Text
-          config_node.content == '@' ? {} : { as: config_node.content }
+          config_node.content == '@' ? {} : { as: config_node.content.to_sym }
         when Nokogiri::XML::Attr
-          { as: config_node.value }
+          { as: config_node.value.to_sym }
         when Nokogiri::XML::Element
           as = attribute(config_node, :as)
-          { as: as, mode: mode(config_node, as) }
+          { as: as ? as.to_sym : nil, mode: mode(config_node, as) }
       end
     end
 

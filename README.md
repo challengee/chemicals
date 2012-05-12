@@ -6,7 +6,7 @@
 * Add shorthand for parsing under same name of element/attribute:
   `<person ch:as='#' />`
 * Add support for constant (are not parsed/rendered).
-* `as` with depth. ex: `ch:as='name/first_name'
+* `as` with depth. ex: `ch:as='name/first_name'`
 
 ## Installation
 

@@ -7,6 +7,7 @@
   `<person ch:as='#' />`
 * Add support for constant (are not parsed/rendered).
 * `as` with depth. ex: `ch:as='name/first_name'`
+* More granular matching of nodes. ex Matching a simgle node within a collection
 
 ## Installation
 

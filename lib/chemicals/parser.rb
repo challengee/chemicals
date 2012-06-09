@@ -7,7 +7,12 @@ module Chemicals
     def parse source
       @namespaces = {}
       # get the document in nokogiri without blanks
-      root = Nokogiri::XML(source.to_s) { |c| c.noblanks }.root
+      # or if the source is already a nokogiri node, then assume it is without blanks.
+      root = if source.kind_of? Nokogiri::XML::Node
+        source.document.root
+      else
+        Nokogiri::XML(source.to_s) { |c| c.noblanks }.root
+      end
       # delete all default namespaces and map the new ones in @namespaces
       handle_namespace root
       # map to a general namespace prefix => href hash

@@ -3,11 +3,20 @@
 require 'minitest/autorun'
 require 'minitest/spec'
 
+require 'mocha'
+
 require_relative 'chemicals_spec_helper'
 
 require 'chemicals'
 
 describe Chemicals::Parser do
+
+  it 'should be able to reuse the document if the source is already a parsed nokogiri document' do
+    template, raw = ChemicalsSpecHelper.test_example :simple_text
+    parsed = Nokogiri::XML(raw)
+    parsed.expects(:to_s).never
+    template.parse(parsed).must_equal 'John Doe'
+  end
 
   describe 'parsing a text node' do
     it 'parses the content as the direct data of the parent node when it is aliased as @' do

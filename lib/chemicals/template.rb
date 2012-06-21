@@ -35,7 +35,7 @@ module Chemicals
           { as: config_node.value.to_sym }
         when Nokogiri::XML::Element
           as = attribute(config_node, :as)
-          { as: as ? as.to_sym : nil, mode: mode(config_node, as) }
+          { as: as ? as.to_s : nil, mode: mode(config_node, as) }
       end
     end
 

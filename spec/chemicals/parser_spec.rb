@@ -18,6 +18,13 @@ describe Chemicals::Parser do
     template.parse(parsed).must_equal 'John Doe'
   end
 
+  it 'should provide an option to not symbolize keys' do
+    template, raw = ChemicalsSpecHelper.test_example :simple_text_alias
+    template = Chemicals::Template.new(template.raw.to_s, symbolize_keys: false)
+    template.parse(raw).must_equal \
+        'name' => 'John Doe'
+  end
+
   describe 'parsing a text node' do
     it 'parses the content as the direct data of the parent node when it is aliased as @' do
       template, raw = ChemicalsSpecHelper.test_example :simple_text

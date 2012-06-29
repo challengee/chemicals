@@ -3,8 +3,11 @@ module Chemicals
 
     NS = 'http://piesync.com/xml/chemicals'
 
-    def initialize(template)
+    def initialize(template, options = {})
       @template = Nokogiri::XML(template) { |c| c.noblanks }
+      @options = {
+        symbolize_keys: true
+      }.merge!(options)
       @cache = {}
     end
 
@@ -30,12 +33,19 @@ module Chemicals
       # configuation is different in every case
       config = case config_node
         when Nokogiri::XML::Text
-          config_node.content == '@' ? {} : { as: config_node.content.to_sym }
+          config_node.content == '@' ? {} : {
+            as: @options[:symbolize_keys] ? config_node.content.to_sym : config_node.content
+          }
         when Nokogiri::XML::Attr
-          { as: config_node.value.to_sym }
+          {
+            as: @options[:symbolize_keys] ? config_node.value.to_sym : config_node.value
+          }
         when Nokogiri::XML::Element
           as = attribute(config_node, :as)
-          { as: as ? as.to_sym : nil, mode: mode(config_node, as) }
+          {
+            as: as ? (@options[:symbolize_keys] ? as.to_sym : as) : nil,
+            mode: mode(config_node, as)
+          }
       end
     end
 

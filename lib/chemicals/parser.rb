@@ -13,6 +13,7 @@ module Chemicals
       else
         Nokogiri::XML(source.to_s) { |c| c.noblanks }.root
       end
+      raise ArgumentError, 'source has no root' unless root
       # delete all default namespaces and map the new ones in @namespaces
       handle_namespace root
       # map to a general namespace prefix => href hash

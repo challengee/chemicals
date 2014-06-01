@@ -1,20 +1,12 @@
 # encoding: utf-8
 
-require 'minitest/autorun'
-require 'minitest/spec'
-
-require 'mocha'
-
-require_relative 'chemicals_spec_helper'
-
-require 'chemicals'
+require 'spec_helper'
 
 describe Chemicals::Parser do
 
   it 'should be able to reuse the document if the source is already a parsed nokogiri document' do
     template, raw = ChemicalsSpecHelper.test_example :simple_text
     parsed = Nokogiri::XML(raw)
-    parsed.expects(:to_s).never
     template.parse(parsed).must_equal 'John Doe'
   end
 

@@ -1,6 +1,16 @@
+require 'minitest'
+require 'minitest/autorun'
+require 'minitest/spec'
+
+require 'mocha'
+
+require 'yaml'
+
+require 'chemicals'
+
 module ChemicalsSpecHelper
 
-  EXAMPLES = YAML.load(IO.read File.expand_path('../examples.yml', __FILE__))
+  EXAMPLES = YAML.load(IO.read File.expand_path('../chemicals/examples.yml', __FILE__))
 
   def self.test_example name
     returns = [Chemicals::Template.new(EXAMPLES[name.to_s]['template']), EXAMPLES[name.to_s]['raw']]

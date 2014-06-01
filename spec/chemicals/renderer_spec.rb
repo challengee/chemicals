@@ -1,11 +1,6 @@
 # encoding: utf-8
 
-require 'minitest/autorun'
-require 'minitest/spec'
-
-require_relative 'chemicals_spec_helper'
-
-require 'chemicals'
+require 'spec_helper'
 
 describe Chemicals::Renderer do
 

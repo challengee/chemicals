@@ -1,3 +1,5 @@
+require 'thread'
+
 module Chemicals
   class Template
 
@@ -9,6 +11,7 @@ module Chemicals
         symbolize_keys: true
       }.merge!(options)
       @cache = {}
+      @semaphore = Mutex.new
     end
 
     # returns the raw template
@@ -18,10 +21,12 @@ module Chemicals
 
     # get the configuration for an xpath expression
     def for path, namespaces = nil
-      @cache[path] ||= if namespaces
-        for_node @template.at(canonicalize(path), namespaces)
-      else
-        for_node @template.at(canonicalize(path))
+      @semaphore.synchronize do
+        @cache[path] ||= if namespaces
+          for_node @template.at(canonicalize(path), namespaces)
+        else
+          for_node @template.at(canonicalize(path))
+        end
       end
     end
 
@@ -69,14 +74,12 @@ module Chemicals
 
     # parse a document
     def parse source
-      @parser ||= Parser.new self
-      @parser.parse source
+      Parser.new(self).parse source
     end
 
     # render a hash
     def render source
-      @renderer ||= Renderer.new self
-      @renderer.render source
+      Renderer.new(self).render source
     end
 
     private

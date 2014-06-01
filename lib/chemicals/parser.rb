@@ -18,7 +18,7 @@ module Chemicals
       # map to a general namespace prefix => href hash
       @namespaces = Hash[(@namespaces.values + root.namespace_definitions).map { |ns|
         [ns.prefix, ns.href] if ns.prefix
-      }]
+      }.compact]
       # begin parsing with the root node
       parse_node root, @template.for(root.path, @namespaces)
     end

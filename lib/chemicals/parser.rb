@@ -71,28 +71,28 @@ module Chemicals
     end
 
     def handle_namespace node
-      if node.namespace
+      namespace = node.namespace
+      if namespace
+        href = namespace.href
         # a namespace without a prefix is a default namespace
-        if !node.namespace.prefix
+        if !namespace.prefix
           # not mapped this namespace?
-          unless @namespaces.has_key? node.namespace.href
+          unless @namespaces.has_key?(href)
             # define the new namespace
-            node.document.root.add_namespace_definition "ns#{@namespaces.size}",
-              node.namespace.href
+            ns = node.document.root.add_namespace "ns#{@namespaces.size}",
+              href
             # add a mapping
-            @namespaces[node.namespace.href] = node.document.root.namespace_definitions.find { |ns|
-              ns.prefix && ns.href == node.namespace.href
-            }
+            @namespaces[href] = ns
           end
           # change the namespace
-          node.namespace = @namespaces[node.namespace.href]
+          node.namespace = @namespaces[href]
         # namespace with prefix
         else
-          @namespaces[node.namespace.href] ||= node.namespace
+          @namespaces[href] ||= namespace
         end
       end
-      # do the same for all child elements and attributes
-      (node.children.to_a + node.attribute_nodes).each { |child| handle_namespace child }
+      node.children.each { |child| handle_namespace child }
+      node.attribute_nodes.each { |child| handle_namespace child }
     end
   end
 end

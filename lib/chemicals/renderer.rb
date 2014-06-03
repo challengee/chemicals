@@ -65,7 +65,7 @@ module Chemicals
           end
         end
       end
-      # Add the correct namespaces!
+      # Add the correct namespaces! TK: Cache this
       node.namespace = document.root.namespace_definitions.find { |ns|
         ns.href == template.namespace.href
       } if node && !template.namespace.nil?

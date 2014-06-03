@@ -22,10 +22,14 @@ module Chemicals
     # get the configuration for an xpath expression
     def for path, namespaces = nil
       @semaphore.synchronize do
-        @cache[path] ||= if namespaces
-          for_node @template.at(canonicalize(path), namespaces)
+        if @cache.has_key?(path)
+          @cache[path]
         else
-          for_node @template.at(canonicalize(path))
+          @cache[path] = if namespaces
+            for_node @template.at(canonicalize(path), namespaces)
+          else
+            for_node @template.at(canonicalize(path))
+          end
         end
       end
     end

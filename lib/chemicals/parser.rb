@@ -32,11 +32,11 @@ module Chemicals
     def parse_node source, config
       return nil unless config
       # parse all child nodes and attribute nodes
-      parsed = source.children.map { |node| @subparse.(node) } +
-        source.attribute_nodes.map { |node| @subparse.(node) }
+      parsed = source.children.map { |child| @subparse.(child) } +
+        source.attribute_nodes.map { |child| @subparse.(child) }
       # reject nil values
       parsed.reject! { |key, value| !value } if parsed.kind_of? Hash
-      # in arrays reject empty hashes
+      # in arrays reject empty hasheschild
       parsed.reject! { |value| value.empty? } if parsed.kind_of? Array
       # we have a few cases here
       parsed = case source

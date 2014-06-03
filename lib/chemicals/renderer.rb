@@ -6,6 +6,9 @@ module Chemicals
     end
 
     def render source
+      @subrender = Proc.new do |document, source, node|
+        render_node document, source, node, true if source
+      end
       # begin with a new document
       document = Nokogiri::XML::Document.new
       # add a temp node as a namespace referebce
@@ -34,9 +37,9 @@ module Chemicals
         return source.map { |part| render_node document, part, template, false } if source
       end
       # render all children
-      rendered = (template.children.to_a + template.attribute_nodes).map do |child|
-        render_node document, source, child, true if source
-      end.flatten
+      rendered = template.children.map { |child| @subrender.(document, source, child) } +
+        template.attribute_nodes.map { |child| @subrender.(document, source, child) }
+      rendered.flatten!
       # reject all nil values
       rendered.reject! { |value| !value }
       # we again have a few cases how to render

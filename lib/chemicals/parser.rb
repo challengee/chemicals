@@ -6,6 +6,9 @@ module Chemicals
 
     def parse source
       @namespaces = {}
+      @subparse = Proc.new do |node|
+        parse_node(node, @template.for(node.path, @namespaces)) || {}
+      end
       # get the document in nokogiri without blanks
       # or if the source is already a nokogiri node, then assume it is without blanks.
       root = if source.kind_of? Nokogiri::XML::Node
@@ -29,10 +32,8 @@ module Chemicals
     def parse_node source, config
       return nil unless config
       # parse all child nodes and attribute nodes
-      parsed = (source.children.to_a + source.attribute_nodes).map do |node|
-        # parse node with the correspondent config (using node xpath)
-        parse_node(node, @template.for(node.path, @namespaces)) || {}
-      end
+      parsed = source.children.map { |node| @subparse.(node) } +
+        source.attribute_nodes.map { |node| @subparse.(node) }
       # reject nil values
       parsed.reject! { |key, value| !value } if parsed.kind_of? Hash
       # in arrays reject empty hashes
